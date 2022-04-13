@@ -51,5 +51,17 @@
         <description>Duration, in milliseconds, of dock hiding animation.</description>
     </key>
 
+    <key type="b" name="toggle-custom-background-color">
+        <default>false</default>
+        <summary>Toggle custom background color</summary>
+        <description>Enables custom background color.</description>
+    </key>
+
+    <key type="s" name="custom-background-color">
+        <default>"rgb(48, 48, 48)"</default>
+        <summary>Sets the custom background color</summary>
+        <description>Allows you to change the background color.</description>
+    </key>
+
     </schema>
 </schemalist>

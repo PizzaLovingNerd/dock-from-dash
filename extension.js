@@ -41,10 +41,16 @@ class Dock extends Dash.Dash {
         this._background.set_opacity(Math.round(settings.get_int('background-opacity') / 100 * 255));
         this._dashContainer.set_track_hover(true);
         this._dashContainer.set_reactive(true);
+
+        if (settings.get_boolean("toggle-custom-background-color")) {
+            this._background.set_style(`background-color: ${settings.get_string('custom-background-color')};`);
+        }
+
         this.show();
         this.dock_animated = false;
         this.keep_dock_shown = false;
     }
+
 
     _itemMenuStateChanged(item, opened) {
         if (opened) {

@@ -1,6 +1,7 @@
 /* -*- mode: js2; js2-basic-offset: 4; indent-tabs-mode: nil -*- */
 
 const Gtk = imports.gi.Gtk;
+const Gdk = imports.gi.Gdk;
 const GLib = imports.gi.GLib;
 
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -49,6 +50,12 @@ function buildPrefsWidget() {
     let hideDockDuration = buildSpinButton('hide-dock-duration',_("Duration of dock hiding animation (ms)"), 0, 1000, 50);
     frame.append(hideDockDuration);
 
+    let customColorToggle = buildSwitcher('toggle-custom-background-color',_("Toggle Custom Color"));
+    frame.append(customColorToggle);
+
+    let customColor = buildColor(settings, 'custom-background-color',_("Set Custom Color"));
+    frame.append(customColor);
+
     frame.show();
     return frame;
 }
@@ -70,7 +77,7 @@ function buildSwitcher(key, labelText) {
 }
 
 function buildSpinButton(key, labeltext, minval, maxval, step_increment) {
-    let hbox = new Gtk.Box({orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
+    let hbox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
     let label = new Gtk.Label({label: labeltext, xalign: 0 });
     let adjust = new Gtk.Adjustment({lower: minval, upper: maxval, value: settings.get_int(key), step_increment: step_increment});
     let spin = new Gtk.SpinButton({digits: 0, adjustment: adjust});
@@ -82,6 +89,29 @@ function buildSpinButton(key, labeltext, minval, maxval, step_increment) {
 
     hbox.append(label);
     hbox.append(spin);
+
+    return hbox;
+}
+
+function buildColor(settings, key, labeltext) {
+    let rgba = new Gdk.RGBA
+    rgba.parse(key)
+
+    let hbox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
+    let label = new Gtk.Label({label: labeltext, xalign: 0 });
+    let color = Gtk.ColorButton.new_with_rgba(rgba);
+
+    label.set_hexpand(true);
+    color.set_hexpand(false);
+    color.set_halign(Gtk.Align.END);
+
+    color.set_use_alpha(false);
+    color.connect(
+        "color-set",
+        (button, color) => log(color.to_string())// settings.set_string(key, color.to_string())
+    );
+    hbox.append(label);
+    hbox.append(color);
 
     return hbox;
 }
